@@ -4,21 +4,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiUsuario.Model
 {
-    [Table("user")]
+    [Table("usuario")]
     public class User
     {
-        public User(string name, int cpf, string birthdayData, int numberPhone, string email, string password, string address, int numberHome, int usuarioId = 0)
+        public User(string name, long cpf, DateTime birthdayData, long numberPhone, string email, string password, string address, int numberHome, int usuarioId = 0)
 
         {
-            this.usuarioId = usuarioId == 0 ? GenerateRandomUserId() : usuarioId;
-            this.name = name ?? throw new ArgumentNullException(nameof(name));
-            this.cpf = cpf;
-            this.birthdayData = birthdayData;
-            this.numberPhone = numberPhone;
-            this.email = email;
-            this.password = password;
-            this.address = address;
-            this.numberHome = numberHome;
+            this.UsuarioId = usuarioId == 0 ? GenerateRandomUserId() : usuarioId;
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.Cpf = cpf;
+            this.BirthdayData = birthdayData;
+            this.NumberPhone = numberPhone;
+            this.Email = email;
+            this.Password = password;
+            this.Address = address;
+            this.NumberHome = numberHome;
             this.CreatedDate = DateTime.Now;
         }
 
@@ -33,31 +33,31 @@ namespace ApiUsuario.Model
 
         [Column("usuario_id")]
         [Key]
-        public int usuarioId { get; private set; }
+        public int UsuarioId { get; private set; }
 
         [Column("name")]
-        public string name { get; private set; }
+        public string Name { get; private set; }
 
         [Column("cpf")]
-        public int cpf { get; private set; }
+        public long Cpf { get; private set; }
 
         [Column("birthday_data")]
-        public string birthdayData { get; private set; }
+        public DateTime BirthdayData { get; private set; }
 
         [Column("number_phone")]
-        public int numberPhone { get; private set; }
+        public long NumberPhone { get; private set; }
 
         [Column("email")]
-        public string email { get; private set; }
+        public string Email { get; private set; }
 
         [Column("password")]
-        public string password { get; private set; }
+        public string Password { get; private set; }
 
-        [Column("adress")]
-        public string address { get; private set; }
+        [Column("address")]
+        public string Address { get; private set; }
 
         [Column ("numberhome")]
-        public int numberHome { get; private set; }
+        public int NumberHome { get; private set; }
 
         [Column("createddate")]
         public DateTime CreatedDate { get; private set; }

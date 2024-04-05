@@ -18,7 +18,7 @@ namespace ApiUsuario.Controllers
         [HttpPost]
         public IActionResult Add(UserViewModel userViewModel)
         {
-            var user = new User(userViewModel.name, userViewModel.cpf, userViewModel.birthdayData, userViewModel.numberPhone, userViewModel.email, userViewModel.password, userViewModel.address, userViewModel.numberHome);
+            var user = new User(userViewModel.Name, userViewModel.Cpf, userViewModel.BirthdayData, userViewModel.NumberPhone, userViewModel.Email, userViewModel.Password, userViewModel.Address, userViewModel.NumberHome);
 
             _userRepository.Add(user);
             return Ok();

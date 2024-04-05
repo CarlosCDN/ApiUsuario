@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ApiUsuario.Model;
+using Microsoft.AspNetCore.Connections;
 
 namespace ApiUsuario.Connection
 {
@@ -9,12 +10,8 @@ namespace ApiUsuario.Connection
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(
-            "Server=localhost;" +
-            "Port=5432;" +
-            "Database=LojaVirtual;" +
-            "User id=postgres;" +
-            "Password=jUSSARA/1405;");
+            var connectionString = "Server=localhost;Database=loja_virtual;User=root;Password=Jussara/1405;";
+            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
         }
 
