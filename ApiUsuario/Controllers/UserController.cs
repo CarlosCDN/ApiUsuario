@@ -1,36 +1,38 @@
-﻿using ApiUsuario.Model;
-using ApiUsuario.ViewModel;
+﻿using ApiUsuario.Application.ViewModel;
+using ApiUsuario.Domain.Model;
+using ApiUsuario.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+namespace ApiUsuario.Controllers;
 
-namespace ApiUsuario.Controllers
+[ApiController]
+[Route("api/v1/users")]
+public class UserController : ControllerBase
 {
-    [ApiController]
-    [Route("api/v1/users")]
-    public class UserController : ControllerBase
+    private readonly IUserRepository _userRepository;
+
+    public UserController(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository ?? throw new ArgumentNullException();
+    }
 
-        public UserController(IUserRepository userRepository)
-        {
-            _userRepository = userRepository ?? throw new ArgumentNullException();
-        }
+    [Authorize]
+    [HttpPost]
+    public IActionResult Add(UserViewModel userViewModel)
+    {
+        var user = new User(userViewModel.Name, userViewModel.UserName, userViewModel.Cpf, userViewModel.BirthdayData, userViewModel.NumberPhone, userViewModel.Email, userViewModel.Password, userViewModel.Address, userViewModel.NumberHome);
+        
+        _userRepository.Add(user);
+        return Ok();
+    }
 
-        [HttpPost]
-        public IActionResult Add(UserViewModel userViewModel)
-        {
-            var user = new User(userViewModel.Name, userViewModel.Cpf, userViewModel.BirthdayData, userViewModel.NumberPhone, userViewModel.Email, userViewModel.Password, userViewModel.Address, userViewModel.NumberHome);
+    [Authorize]
+    [HttpGet]
+    public IActionResult Get()
+    {
+        var user = _userRepository.Get();
 
-            _userRepository.Add(user);
-            return Ok();
-        }
+        return Ok(user);
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            var user = _userRepository.Get();
-
-            return Ok(user);
-
-        }
     }
 }
