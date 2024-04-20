@@ -1,4 +1,5 @@
-﻿using ApiUsuario.Domain.Model;
+﻿using ApiUsuario.Application.DTOs;
+using ApiUsuario.Domain.Model;
 
 namespace ApiUsuario.Infrastructure.Repositories;
 

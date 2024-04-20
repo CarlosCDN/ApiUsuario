@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Connections;
 using ApiUsuario.Domain.Model;
 
-namespace ApiUsuario.Infrastructure.Repositories;
+namespace ApiUsuario.Infrastructure;
 
 public class ConnectionContext : DbContext
 {
