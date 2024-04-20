@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ApiUsuario.ViewModel;
+using ApiUsuario.Application.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using System.Globalization;
 using ApiUsuario.Domain.Model;
