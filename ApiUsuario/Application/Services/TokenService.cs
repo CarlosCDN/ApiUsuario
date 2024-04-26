@@ -1,4 +1,5 @@
-﻿using ApiUsuario.Domain.Model;
+﻿using ApiUsuario.Application.DTOs;
+using ApiUsuario.Domain.Model;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -8,7 +9,7 @@ namespace ApiUsuario.Application.Services;
 
 public class TokenService
 {
-    public static object GenerateToken(User user)
+    public static object GenerateToken(UserDTO userDTO)
     {
         var key = Encoding.ASCII.GetBytes(Key.Secret);
 
@@ -16,7 +17,7 @@ public class TokenService
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new Claim("userId", user.UsuarioId.ToString()),
+                new Claim("userId", userDTO.UsuarioId.ToString()),
             }),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

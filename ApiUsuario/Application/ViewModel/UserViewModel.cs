@@ -4,6 +4,31 @@ namespace ApiUsuario.Application.ViewModel;
 
 public class UserViewModel
 {
+    public UserViewModel(string userName, string name, long cpf, DateTime birthdayData, long numberPhone, string email, string password, string address, int numberHome)
+    {
+        UserName = userName;
+        Name = name;
+        Cpf = cpf;
+        BirthdayData = birthdayData;
+        NumberPhone = numberPhone;
+        Email = email;
+        Password = password;
+        Address = address;
+        NumberHome = numberHome;
+    }
+
+    public UserViewModel(string userName, string name, long cpf, DateTime birthdayData, long numberPhone, string email, string address, int numberHome)
+    {
+        UserName = userName;
+        Name = name;
+        Cpf = cpf;
+        BirthdayData = birthdayData;
+        NumberPhone = numberPhone;
+        Email = email;
+        Address = address;
+        NumberHome = numberHome;
+    }
+    public UserViewModel() { }
 
     public string UserName { get; set; }
 

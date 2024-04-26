@@ -16,8 +16,33 @@ public class UserDTO
         Address = address;
         NumberHome = numberHome;
     }
+    public UserDTO( string userName, long cpf,  string email)
+    {
+        UserName = userName;
+        Cpf = cpf;
+        Email = email;
+    }
+    public UserDTO(string userName, string password) 
+    {
+        this.UserName = userName;  
+        this.Password = password;
+    }
 
-    public int UsuarioId { get; set; }
+    public UserDTO(string userName)
+    {
+        this.UserName = userName;
+    }
+
+    public UserDTO(int usuarioId)
+    {
+        UsuarioId = usuarioId;
+    }
+    public UserDTO()
+    {
+
+    }
+    
+    public int UsuarioId {  get; set; }
 
     public string UserName { get; set; }
     public string Name { get; set; }
@@ -30,12 +55,16 @@ public class UserDTO
 
     public string Email { get; set; }
 
-    public string Password { get;  set; }
+    public string Password { get; set; }
 
     public string Address { get;  set; }
 
     public int NumberHome { get;  set; }
 
-    public DateTime CreatedDate { get;  set; }
+    public DateTime CreatedDate {  get;  set; }
+
+    public string Profile { get; set; }
+
+    public string Status { get; set; }
 
 }

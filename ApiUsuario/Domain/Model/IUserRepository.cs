@@ -1,11 +1,19 @@
-﻿namespace ApiUsuario.Domain.Model;
+﻿using ApiUsuario.Application.DTOs;
+
+namespace ApiUsuario.Domain.Model;
 
 public interface IUserRepository
 {
     void Add(User user);
 
-    List<User> Get();
+    List<User> GetId(int Id);
+
+    public string GetUser(string username);
+    
+    public string GetProfile(string username);
 
     public User Get(string username, string password);
+
+    public string GetResetEmail(string useName, long cpf, string email);
 
 }

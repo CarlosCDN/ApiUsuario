@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Globalization;
 using ApiUsuario.Domain.Model;
 using ApiUsuario.Application.Services;
+using ApiUsuario.Application.DTOs;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 namespace ApiUsuario.Controllers;
 
 [ApiController]
@@ -20,12 +22,13 @@ public class AuthController : Controller
     public IActionResult Auth(string userName, string password)
     
     {
+        UserDTO userDTO = new UserDTO(userName, password);
 
-        var user = _userRepository.Get(userName, password);
+         _userRepository.Get(userDTO.UserName, userDTO.Password);
         
-        if (userName == user.UserName  && password == user.Password)
+        if (userName == userDTO.UserName  && password == userDTO.Password)
         {
-            var token = TokenService.GenerateToken(user);
+            var token = TokenService.GenerateToken(userDTO);
             return Ok(token);
         }
         return BadRequest("UserName or Password invalid");

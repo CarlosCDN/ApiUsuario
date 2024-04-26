@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using ApiUsuario.Application.DTOs;
+using System.Net;
+using System.Xml.Linq;
+using System.Net.Mail;
+using ApiUsuario.Application.Services;
 
 namespace ApiUsuario.Controllers;
 
@@ -22,7 +26,7 @@ public class UserController : ControllerBase
     }
 
 
-    [HttpPost]
+    [HttpPost("register")]
     public IActionResult Add(UserViewModel userViewModel)
     {
 
@@ -31,21 +35,65 @@ public class UserController : ControllerBase
         {
             var user = _mapper.Map<User>(userDTO);
             _userRepository.Add(user);
-            return Ok();
+            return Ok("Usuário cadastrado com sucesso");
         }
         else
         {
             return BadRequest("CPF não contem 11 digitos ou E-mail invalido");
         }
     }
-
-    [HttpGet]
-    public IActionResult Get()
+    //Reset de senha por e-mail
+    [HttpPost("RecuperarSenha")]
+    public IActionResult Get(string userName, string email, long cpf)
     {
-        var user = _userRepository.Get();
+        var userDTO = new UserDTO(userName, cpf, email);
+        var user = _userRepository.GetResetEmail(userDTO.UserName, userDTO.Cpf, userDTO.Email);
 
-
-        var userDTO = _mapper.Map<List<UserDTO>>(user); 
-        return Ok(userDTO);
+        if (MailService.Send(email, user))
+            return Ok("E-Mail enviado com sucesso");
+        else
+            return NotFound();
     }
+    //Acesso só com perfil Adm
+    [HttpGet("{userId}")]
+    public IActionResult Get(int userId)
+    {
+        var userDTO = new UserDTO(userId);
+        var user = _userRepository.GetId(userDTO.UsuarioId);
+
+        if (userId == null)
+        {
+            return NotFound();
+        }
+        var userDto = _mapper.Map<List<UserDTO>>(user);
+        return Ok(userDto);
+    }
+
+    //Retorna Profile
+    [HttpGet("profile")]
+    public IActionResult Get(string userName)
+    {
+
+        var user = _userRepository.GetProfile(userName);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(user);
+    }
+
+    [HttpGet("user-profile")]
+    public IActionResult GetUser(string userName)
+    {
+        var user = _userRepository.GetUser(userName);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(user);
+
+    }
+
 }
