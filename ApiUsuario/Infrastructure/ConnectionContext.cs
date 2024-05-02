@@ -13,7 +13,7 @@ public class ConnectionContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var connectionString = "Server=localhost;Database=loja_virtual;User=root;Password=1234;";
+        var connectionString = "Server=localhost;Database=loja_virtual;User=root;Password=jUSSARA/1405;";
         optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
     }
