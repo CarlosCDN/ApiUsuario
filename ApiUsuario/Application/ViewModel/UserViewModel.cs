@@ -100,7 +100,7 @@ public class UserViewModel
         try
         {
             var addr = new MailAddress(email);
-            return addr.Address == email || email.EndsWith(".br", StringComparison.OrdinalIgnoreCase); ;
+            return addr.Address == email.Trim();
         }
         catch 
         { 

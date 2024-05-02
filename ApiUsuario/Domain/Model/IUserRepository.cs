@@ -6,7 +6,7 @@ public interface IUserRepository
 {
     void Add(User user);
 
-    List<User> GetId(int Id);
+    List<UserDTO> GetId(int Id);
 
     public string GetUser(string username);
     
@@ -16,4 +16,7 @@ public interface IUserRepository
 
     public string GetResetEmail(string useName, long cpf, string email);
 
+    public string PutResetSenha(string username, string email, string password);
+
+    public bool PutDeleteUser(string username, string email, string password);
 }

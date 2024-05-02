@@ -30,10 +30,10 @@ public class UserController : ControllerBase
     public IActionResult Add(UserViewModel userViewModel)
     {
 
-        var userDTO = new UserDTO(userViewModel.Name, userViewModel.UserName, userViewModel.Cpf, userViewModel.BirthdayData, userViewModel.NumberPhone, userViewModel.Email, userViewModel.Password, userViewModel.Address, userViewModel.NumberHome);
+        var userView = new User(userViewModel.Name, userViewModel.UserName, userViewModel.Cpf, userViewModel.BirthdayData, userViewModel.NumberPhone, userViewModel.Email, userViewModel.Password, userViewModel.Address, userViewModel.NumberHome);
         if (userViewModel.ValidaCpf(userViewModel.Cpf) && userViewModel.IsValidEmail(userViewModel.Email))
         {
-            var user = _mapper.Map<User>(userDTO);
+            var user = _mapper.Map<User>(userView);
             _userRepository.Add(user);
             return Ok("Usuário cadastrado com sucesso");
         }
@@ -42,18 +42,24 @@ public class UserController : ControllerBase
             return BadRequest("CPF não contem 11 digitos ou E-mail invalido");
         }
     }
-    //Reset de senha por e-mail
-    [HttpPost("RecuperarSenha")]
+
+    //Recuperar senha por e-mail
+    [HttpPut("RecuperarSenhaEmail")]
     public IActionResult Get(string userName, string email, long cpf)
     {
         var userDTO = new UserDTO(userName, cpf, email);
-        var user = _userRepository.GetResetEmail(userDTO.UserName, userDTO.Cpf, userDTO.Email);
-
-        if (MailService.Send(email, user))
-            return Ok("E-Mail enviado com sucesso");
-        else
-            return NotFound();
+        var recuperarSenha = _userRepository.GetResetEmail(userDTO.UserName, userDTO.Cpf, userDTO.Email);
+            return Ok(recuperarSenha);
     }
+
+    [HttpPut("RecuperarSenha")]
+    public IActionResult Get(string userName, string email, string newPassword)
+    {
+        var userDTO = new UserDTO(userName, email, newPassword);
+        var user = _userRepository.PutResetSenha(userDTO.UserName, userDTO.Email, userDTO.Password);
+        return Ok("Reset feito com sucesso");
+    }
+
     //Acesso só com perfil Adm
     [HttpGet("{userId}")]
     public IActionResult Get(int userId)
@@ -86,14 +92,30 @@ public class UserController : ControllerBase
     [HttpGet("user-profile")]
     public IActionResult GetUser(string userName)
     {
-        var user = _userRepository.GetUser(userName);
-        if (user == null)
+        try
         {
-            return NotFound();
+            var user = _userRepository.GetUser(userName);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
-
-        return Ok(user);
-
+        catch (Exception ex) 
+        { 
+            return BadRequest(ex.Message);
+        }
     }
 
+    [HttpPut("DeleteUser")]
+    public IActionResult PutDeleteUser(string  userName, string email, string password) 
+    {
+        var user = _userRepository.PutDeleteUser(userName, email, password);
+        if(user == true)
+        {
+            return Ok("Usuário deletado!");
+        }
+        return BadRequest();
+    }
 }

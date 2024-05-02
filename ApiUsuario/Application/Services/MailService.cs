@@ -1,34 +1,46 @@
 ﻿using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 
 namespace ApiUsuario.Application.Services;
 
-public static class MailService 
+public class MailService
 {
-    public static bool Send(string email, string newPassword)
+    private readonly string _senderEmail;
+    private readonly string _senderPassword;
+
+    public MailService(string senderEmail, string senderPassword)
     {
-        MailMessage emailMessage = new MailMessage();
+        _senderEmail = senderEmail;
+        _senderPassword = senderPassword;
+    }
+
+    public bool SendeMail(string recipientEmail, string subject, string message)
+    {
         try
         {
-            var smtpClient = new SmtpClient("smtp.gmail.com", 587);
-            smtpClient.EnableSsl = true;
-            smtpClient.Timeout = 60 * 60;
+            var smtpClient = new SmtpClient("smtp-mail.outlook.com");
+            smtpClient.Port = 587;
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("", "");
-            
-            emailMessage.From = new MailAddress("", "");
-            emailMessage.Body = "Testando envio";
-            emailMessage.Subject = "Troca de senha:";
-            emailMessage.IsBodyHtml = true;
-            emailMessage.Priority = MailPriority.Normal;
-            emailMessage.To.Add(email);
+            smtpClient.EnableSsl = true;
+            smtpClient.Credentials = new NetworkCredential(_senderEmail, _senderPassword);
 
+            var emailMessage = new MailMessage(_senderEmail, recipientEmail)
+            {
+                Subject = subject,
+                Body = message,
+                IsBodyHtml = true,
+                Priority = MailPriority.Normal
+
+            };
             smtpClient.Send(emailMessage);
             return true;
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             return false;
         }
     }
-} 
+}

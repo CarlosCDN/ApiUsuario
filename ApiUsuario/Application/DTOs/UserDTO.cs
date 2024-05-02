@@ -37,11 +37,14 @@ public class UserDTO
     {
         UsuarioId = usuarioId;
     }
-    public UserDTO()
+    public UserDTO(string userName, string email, string password)
     {
-
+        UserName = userName;
+        Email = email;
+        Password = password;    
     }
-    
+    public UserDTO() { }
+
     public int UsuarioId {  get; set; }
 
     public string UserName { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using ApiUsuario.Application.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,8 +11,6 @@ public class User
     public User(string name, string userName, long cpf, DateTime birthdayData, long numberPhone, string email, string password, string address, int numberHome, int usuarioId = 0)
 
     {
-        //Colocar while para gerar um código que não exista no BD
-
         UsuarioId = usuarioId == 0 ? GenerateRandomUserId() : usuarioId;
         Name = name ?? throw new ArgumentNullException(nameof(name));
         UserName = userName;
@@ -27,44 +26,6 @@ public class User
         Status = "Ativado";
     }
 
-
-    public User(string userName, string name, long cpf, DateTime birthdayData, long numberPhone, string email, string address, int numberHome)
-    {
-        UserName = userName;
-        Name = name;
-        Cpf = cpf;
-        BirthdayData = birthdayData;
-        NumberPhone = numberPhone;
-        Email = email;
-        Address = address;
-        NumberHome = numberHome;
-    }
-
-
-
-    public Boolean AddUser(string name, string userName, long cpf, DateTime birthdayData, long numberPhone, string email, string password, string address, int numberHome, int usuarioId = 0)
-    {
-        if (usuarioId != UsuarioId)
-        {
-            UsuarioId = usuarioId == 0 ? GenerateRandomUserId() : usuarioId;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            UserName = userName;
-            Cpf = cpf;
-            BirthdayData = birthdayData;
-            NumberPhone = numberPhone;
-            Email = email;
-            Password = password;
-            Address = address;
-            NumberHome = numberHome;
-            CreatedDate = DateTime.UtcNow;
-            Profile = "Cliente";
-            Status = "Ativado";
-            return true;
-        }
-        else
-            return false;
-
-    }
     private int GenerateRandomUserId()
     {
         // Gera um número aleatório de 6 dígitos
@@ -72,7 +33,8 @@ public class User
         return random.Next(100000, 999999);
     }
 
-    private string GenerateRandomPassword()
+    //Gera senha aleatoria para alteração
+    public static string GenerateRandomPassword()
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
@@ -83,91 +45,49 @@ public class User
 
     public User() {    }
 
-    public List<User> DadosAdm()
-    {
-        var status = "Ativado";
-        if (Status == status)
-        {
-            var user = new User
-            {
-                UsuarioId = UsuarioId,
-                Name = Name,
-                UserName = UserName,
-                Cpf = Cpf,
-                Email = Email,
-                NumberPhone = NumberPhone,
-                Address = Address,
-                NumberHome = NumberHome,
-                BirthdayData = BirthdayData,
-                CreatedDate = CreatedDate,
-                Profile = Profile,
-                Status = Status
-            };
-            Password = null;
-
-            return new List<User>{ user };
-        }
-        else
-        {
-            return new List<User>();
-        }
-    }
-
     //Retorna Profile
-    public string GetProfile(string userName)
+    public string GetProfile()
     {
-        //Colocar para ignorar minuscula e maiuscula
-        if (userName == UserName)
             return Profile;
-        else
-            return "Usuario não existe";
     }
 
     // Retorna dados do Usuário
     public string GetDados()
     {
-        var status = "Ativado";
-        if (this.Status == status)
+       
         return $"Nome: {Name}\nUserName: {UserName}\nCPF: {Cpf}\nE-mail: {Email}\nTelefone: {NumberPhone}\nEndereço: {Address}, {NumberHome}\nData de Nascimento: {BirthdayData}\n";
-        else
-        {
-            return "Usuário não encontrado";
-        }
+      
     }
 
     //Desativa User
-    public bool DeleteUser(string userName, string email , string password)
+    public bool DeleteUser()
     {
         var status = "Inativo";
-        if (userName == UserName && email == Email && password == Password)
-        {
-            Status = status;
-
-            return true;
-        }
-        return false;
+        Status = status;
+        return true;
     }
 
     //Troca de senha
-    public bool resetPassword(string newPassword)
+    public bool ResetPassword(string newPassword)
     {
         Password = newPassword;
         return true;
     }
 
-    public string recuperarSenha(string userName, long cpf, string email)
+    public bool RecuperarSenha()
     {
-        if (Email == email && Cpf == cpf && UserName == userName)
+        var senderEmail = new MailService("", "");
+        var newPassword = GenerateRandomPassword();
+        var validador = senderEmail.SendeMail("", "Recuperacao de senha", $"Olá! Sua nova senha é: {newPassword}"); // Envia nova senha
+
+        if (validador == true)
         {
-            var newPassword = GenerateRandomPassword();
             Password = newPassword;
-            return newPassword;
+            return true;
         }
         else
-            return "Dados não compativeis";
+        return false;
     }
-   
-
 
     [Column("usuario_id")]
     [Key]
