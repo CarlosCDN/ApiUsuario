@@ -45,6 +45,11 @@ public class User
 
     public User() {    }
 
+    public User(string userName, string password)
+    {
+        UserName = userName;
+        Password = password;
+    }
     //Retorna Profile
     public string GetProfile()
     {
@@ -76,9 +81,10 @@ public class User
 
     public bool RecuperarSenha()
     {
-        var senderEmail = new MailService("", "");
+        
+        var senderEmail = new MailService("", ""); // No primeiro "" é colocado o e-mail, no caso está configurado para outlook. No segundo é passado a senha do email
         var newPassword = GenerateRandomPassword();
-        var validador = senderEmail.SendeMail("", "Recuperacao de senha", $"Olá! Sua nova senha é: {newPassword}"); // Envia nova senha
+        var validador = senderEmail.SendeMail(Email, "Recuperacao de senha", $"Olá! Sua nova senha é: {newPassword}"); // Envia nova senha
 
         if (validador == true)
         {
@@ -86,7 +92,7 @@ public class User
             return true;
         }
         else
-        return false;
+            return false;
     }
 
     [Column("usuario_id")]

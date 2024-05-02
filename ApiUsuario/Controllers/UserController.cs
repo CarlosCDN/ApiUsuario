@@ -26,6 +26,63 @@ public class UserController : ControllerBase
     }
 
 
+    [Authorize]
+    [HttpPut("RecuperarSenha")]
+    public IActionResult Get(string userName, string email, string newPassword)
+    {
+        var userDTO = new UserDTO(userName, email, newPassword);
+        var user = _userRepository.PutResetSenha(userDTO.UserName, userDTO.Email, userDTO.Password);
+        return Ok("Reset feito com sucesso");
+    }
+
+    //Acesso só com perfil Adm
+    [Authorize]
+    [HttpGet("{userId}")]
+    public IActionResult Get(int userId)
+    {
+        var userDTO = new UserDTO(userId);
+        var user = _userRepository.GetId(userDTO.UsuarioId);
+
+        if (userId == null)
+        {
+            return NotFound();
+        }
+        var userDto = _mapper.Map<List<UserDTO>>(user);
+        return Ok(userDto);
+    }
+
+    [Authorize]
+    [HttpGet("user-profile")]
+    public IActionResult GetUser(string userName)
+    {
+        try
+        {
+            var user = _userRepository.GetUser(userName);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+        catch (Exception ex) 
+        { 
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [Authorize]
+    [HttpPut("DeleteUser")]
+    public IActionResult PutDeleteUser(string  userName, string email, string password) 
+    {
+        var user = _userRepository.PutDeleteUser(userName, email, password);
+        if(user == true)
+        {
+            return Ok("Usuário deletado!");
+        }
+        return BadRequest();
+    }
+
     [HttpPost("register")]
     public IActionResult Add(UserViewModel userViewModel)
     {
@@ -49,30 +106,7 @@ public class UserController : ControllerBase
     {
         var userDTO = new UserDTO(userName, cpf, email);
         var recuperarSenha = _userRepository.GetResetEmail(userDTO.UserName, userDTO.Cpf, userDTO.Email);
-            return Ok(recuperarSenha);
-    }
-
-    [HttpPut("RecuperarSenha")]
-    public IActionResult Get(string userName, string email, string newPassword)
-    {
-        var userDTO = new UserDTO(userName, email, newPassword);
-        var user = _userRepository.PutResetSenha(userDTO.UserName, userDTO.Email, userDTO.Password);
-        return Ok("Reset feito com sucesso");
-    }
-
-    //Acesso só com perfil Adm
-    [HttpGet("{userId}")]
-    public IActionResult Get(int userId)
-    {
-        var userDTO = new UserDTO(userId);
-        var user = _userRepository.GetId(userDTO.UsuarioId);
-
-        if (userId == null)
-        {
-            return NotFound();
-        }
-        var userDto = _mapper.Map<List<UserDTO>>(user);
-        return Ok(userDto);
+        return Ok(recuperarSenha);
     }
 
     //Retorna Profile
@@ -87,35 +121,5 @@ public class UserController : ControllerBase
         }
 
         return Ok(user);
-    }
-
-    [HttpGet("user-profile")]
-    public IActionResult GetUser(string userName)
-    {
-        try
-        {
-            var user = _userRepository.GetUser(userName);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(user);
-        }
-        catch (Exception ex) 
-        { 
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpPut("DeleteUser")]
-    public IActionResult PutDeleteUser(string  userName, string email, string password) 
-    {
-        var user = _userRepository.PutDeleteUser(userName, email, password);
-        if(user == true)
-        {
-            return Ok("Usuário deletado!");
-        }
-        return BadRequest();
     }
 }
