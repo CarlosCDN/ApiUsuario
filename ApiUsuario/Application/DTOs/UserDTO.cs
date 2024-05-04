@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ApiUsuario.Application.DTOs;
+﻿namespace ApiUsuario.Application.DTOs;
 
 public class UserDTO
 {
@@ -16,15 +14,15 @@ public class UserDTO
         Address = address;
         NumberHome = numberHome;
     }
-    public UserDTO( string userName, long cpf,  string email)
+    public UserDTO(string userName, long cpf, string email)
     {
         UserName = userName;
         Cpf = cpf;
         Email = email;
     }
-    public UserDTO(string userName, string password) 
+    public UserDTO(string userName, string password)
     {
-        this.UserName = userName;  
+        this.UserName = userName;
         this.Password = password;
     }
 
@@ -41,11 +39,11 @@ public class UserDTO
     {
         UserName = userName;
         Email = email;
-        Password = password;    
+        Password = password;
     }
     public UserDTO() { }
 
-    public int UsuarioId {  get; set; }
+    public int UsuarioId { get; set; }
 
     public string UserName { get; set; }
     public string Name { get; set; }
@@ -60,11 +58,11 @@ public class UserDTO
 
     public string Password { get; set; }
 
-    public string Address { get;  set; }
+    public string Address { get; set; }
 
-    public int NumberHome { get;  set; }
+    public int NumberHome { get; set; }
 
-    public DateTime CreatedDate {  get;  set; }
+    public DateTime CreatedDate { get; set; }
 
     public string Profile { get; set; }
 

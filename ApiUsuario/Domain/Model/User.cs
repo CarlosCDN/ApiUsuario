@@ -1,5 +1,4 @@
 ﻿using ApiUsuario.Application.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,7 +17,7 @@ public class User
         BirthdayData = birthdayData;
         NumberPhone = numberPhone;
         Email = email;
-        Password = password;
+        Password = HashPassword(password);
         Address = address;
         NumberHome = numberHome;
         CreatedDate = DateTime.UtcNow;
@@ -43,7 +42,7 @@ public class User
     }
 
 
-    public User() {    }
+    public User() { }
 
     public User(string userName, string password)
     {
@@ -53,15 +52,15 @@ public class User
     //Retorna Profile
     public string GetProfile()
     {
-            return Profile;
+        return Profile;
     }
 
     // Retorna dados do Usuário
     public string GetDados()
     {
-       
+
         return $"Nome: {Name}\nUserName: {UserName}\nCPF: {Cpf}\nE-mail: {Email}\nTelefone: {NumberPhone}\nEndereço: {Address}, {NumberHome}\nData de Nascimento: {BirthdayData}\n";
-      
+
     }
 
     //Desativa User
@@ -75,24 +74,33 @@ public class User
     //Troca de senha
     public bool ResetPassword(string newPassword)
     {
-        Password = newPassword;
+        Password = HashPassword(newPassword);
         return true;
     }
 
     public bool RecuperarSenha()
     {
-        
+
         var senderEmail = new MailService("", ""); // No primeiro "" é colocado o e-mail, no caso está configurado para outlook. No segundo é passado a senha do email
         var newPassword = GenerateRandomPassword();
         var validador = senderEmail.SendeMail(Email, "Recuperacao de senha", $"Olá! Sua nova senha é: {newPassword}"); // Envia nova senha
 
         if (validador == true)
         {
-            Password = newPassword;
+            Password = HashPassword(newPassword);
             return true;
         }
         else
             return false;
+    }
+
+    private string HashPassword(string password)
+    {
+        return BCrypt.Net.BCrypt.HashPassword(password);
+    }
+    public bool VerifyPassword(string password, string hashedPassword)
+    {
+        return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
     }
 
     [Column("usuario_id")]
@@ -117,7 +125,7 @@ public class User
     public string Email { get; private set; }
 
     [Column("password")]
-    public string Password {  get; private set; }
+    public string Password { get; private set; }
 
     [Column("address")]
     public string Address { get; private set; }
@@ -131,5 +139,5 @@ public class User
     [Column("profile")]
     public string Profile { get; private set; }
     [Column("status")]
-    public string Status {  get; private set; }
+    public string Status { get; private set; }
 }

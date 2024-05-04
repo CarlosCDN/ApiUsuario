@@ -9,10 +9,10 @@ public interface IUserRepository
     List<UserDTO> GetId(int Id);
 
     public string GetUser(string username);
-    
+
     public string GetProfile(string username);
 
-    public User Get(string username, string password);
+    public bool Get(string username, string password);
 
     public string GetResetEmail(string useName, long cpf, string email);
 

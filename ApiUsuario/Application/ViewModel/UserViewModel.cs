@@ -1,5 +1,4 @@
 ﻿using System.Net.Mail;
-using System.Xml.Linq;
 namespace ApiUsuario.Application.ViewModel;
 
 public class UserViewModel
@@ -102,10 +101,10 @@ public class UserViewModel
             var addr = new MailAddress(email);
             return addr.Address == email.Trim();
         }
-        catch 
-        { 
-        return false;
-        } 
+        catch
+        {
+            return false;
+        }
     }
 
 }

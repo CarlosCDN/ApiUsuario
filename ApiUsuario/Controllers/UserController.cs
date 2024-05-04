@@ -1,14 +1,9 @@
-﻿using ApiUsuario.Application.ViewModel;
-using ApiUsuario.Domain.Model;
+﻿using ApiUsuario.Application.DTOs;
 using ApiUsuario.Application.ViewModel;
+using ApiUsuario.Domain.Model;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using ApiUsuario.Application.DTOs;
-using System.Net;
-using System.Xml.Linq;
-using System.Net.Mail;
-using ApiUsuario.Application.Services;
 
 namespace ApiUsuario.Controllers;
 
@@ -65,18 +60,18 @@ public class UserController : ControllerBase
 
             return Ok(user);
         }
-        catch (Exception ex) 
-        { 
+        catch (Exception ex)
+        {
             return BadRequest(ex.Message);
         }
     }
 
     [Authorize]
     [HttpPut("DeleteUser")]
-    public IActionResult PutDeleteUser(string  userName, string email, string password) 
+    public IActionResult PutDeleteUser(string userName, string email, string password)
     {
         var user = _userRepository.PutDeleteUser(userName, email, password);
-        if(user == true)
+        if (user == true)
         {
             return Ok("Usuário deletado!");
         }

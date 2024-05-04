@@ -1,19 +1,12 @@
 ﻿using ApiUsuario.Application.DTOs;
-using ApiUsuario.Application.Services;
 using ApiUsuario.Domain.Model;
-using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Net;
-using System.Xml.Linq;
 
 namespace ApiUsuario.Infrastructure.Repositories;
 
 public class UserRepository : IUserRepository
 {
     private readonly ConnectionContext _context = new ConnectionContext();
-    
+
     //Adiciona Usuario no banco
     public void Add(User user)
     {
@@ -60,9 +53,17 @@ public class UserRepository : IUserRepository
     }
 
     //Verifica Acesso - autentificador
-    public User Get(string userName, string password)
+    public bool Get(string userName, string password)
     {
-        return _context.User.First(u => u.UserName == userName && u.Password == password && u.Status == "Ativado");
+        var user = _context.User.FirstOrDefault(u => u.UserName == userName && u.Status == "Ativado");
+        if (user != null && user.VerifyPassword(password, user.Password))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 
@@ -71,7 +72,7 @@ public class UserRepository : IUserRepository
     {
         var user = _context.User.FirstOrDefault(u => u.UserName == userName && u.Status == "Ativado");
 
-        if(user == null)
+        if (user == null)
         {
             return "Usuário não existe";
         }
@@ -95,7 +96,7 @@ public class UserRepository : IUserRepository
             return null;
         }
     }
-    
+
     //Reset de senha depois do login
     public string PutResetSenha(string userName, string email, string password)
     {
@@ -105,26 +106,26 @@ public class UserRepository : IUserRepository
         {
             user.ResetPassword(password); // Atualiza a senha do usuário
             _context.SaveChanges(); // Salva as alterações no banco de dados
-            return user.Password; // Retorna a nova senha
+            return "Senha alterada com sucesso"; // Retorna a nova senha
         }
         else
         {
             return null;
         }
     }
-    
+
     //Desativa usuário
-    public bool PutDeleteUser (string userName, string email, string password) 
+    public bool PutDeleteUser(string userName, string email, string password)
     {
-        var user = _context.User.FirstOrDefault(u => u.UserName == userName && u.Email == email && u.Password == password && u.Status == "Ativado");
-        if (user != null) 
+        var user = _context.User.FirstOrDefault(u => u.UserName == userName && u.Email == email && u.VerifyPassword(password, u.Password) == true && u.Status == "Ativado");
+        if (user != null)
         {
-             user.DeleteUser();
+            user.DeleteUser();
             _context.SaveChanges();
             return true;
-        
+
 
         }
-        return false;       
+        return false;
     }
 }
