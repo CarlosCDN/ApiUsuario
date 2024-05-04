@@ -7,9 +7,9 @@ public class ConnectionContext : DbContext
 {
     public DbSet<User> User { get; set; }
 
-    public DbSet<User> Token {  get; set; }
+    public DbSet<AuthToken> Token {  get; set; }
 
-    public DbSet<User> LogAcess { get; set; }
+    public DbSet<AccessHistory> LogAcess { get; set; }
 
 
 
