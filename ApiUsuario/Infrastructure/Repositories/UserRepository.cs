@@ -53,16 +53,16 @@ public class UserRepository : IUserRepository
     }
 
     //Verifica Acesso - autentificador
-    public bool Get(string userName, string password)
+    public int Get(string userName, string password)
     {
         var user = _context.User.FirstOrDefault(u => u.UserName == userName && u.Status == "Ativado");
         if (user != null && user.VerifyPassword(password, user.Password))
         {
-            return true;
+            return user.UsuarioId;
         }
         else
         {
-            return false;
+            return 0;
         }
     }
 

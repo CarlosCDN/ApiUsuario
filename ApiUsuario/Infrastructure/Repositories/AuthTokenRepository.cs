@@ -1,16 +1,17 @@
 ﻿using ApiUsuario.Domain.Model;
 
-namespace ApiUsuario.Infrastructure.Repositories
-{
-    public class AuthTokenRepository : IAuthTokenRepository
-    {
-        private readonly ConnectionContext _context = new ConnectionContext();
+namespace ApiUsuario.Infrastructure.Repositories;
 
-        //Adiciona Usuario no banco
-        public void Add(AuthToken authToken)
-        {
-            _context.Token.Add(authToken);
-            _context.SaveChanges();
-        }
+public class AuthTokenRepository : IAuthTokenRepository
+{
+    private readonly ConnectionContext _context = new ConnectionContext();
+
+    //Adiciona Usuario no banco
+    public string AddToken(int usuarioId,  string token)
+    {
+        var salvarToken = new AuthToken(usuarioId, token);
+        _context.AuthTokens.Add(salvarToken);
+        _context.SaveChanges();
+        return "Sucesso";
     }
 }

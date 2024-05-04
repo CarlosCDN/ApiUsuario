@@ -9,11 +9,14 @@ namespace ApiUsuario.Controllers;
 public class AuthController : Controller
 {
     private readonly IUserRepository _userRepository;
+    private readonly IAuthTokenRepository _authTokenRepository;
 
-    public AuthController(IUserRepository userRepository)
+    public AuthController(IUserRepository userRepository, IAuthTokenRepository authTokenRepository)
     {
         _userRepository = userRepository ?? throw new ArgumentNullException();
+        _authTokenRepository = authTokenRepository ?? throw new ArgumentNullException();
     }
+
     [HttpPost]
     public IActionResult Auth(string userName, string password)
 
@@ -22,9 +25,12 @@ public class AuthController : Controller
 
         var user = _userRepository.Get(userDTO.UserName, userDTO.Password);
 
-        if (user == true)
+        if (user != 0)
         {
-            var token = TokenService.GenerateToken(userDTO);
+            object token = TokenService.GenerateToken(userDTO);
+            string tokenString = token.ToString();
+            _authTokenRepository.AddToken(user, tokenString);
+
             return Ok(token);
         }
         return BadRequest("UserName or Password invalid");

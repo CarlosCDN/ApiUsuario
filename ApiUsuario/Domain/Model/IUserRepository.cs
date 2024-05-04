@@ -12,7 +12,7 @@ public interface IUserRepository
 
     public string GetProfile(string username);
 
-    public bool Get(string username, string password);
+    public int Get(string username, string password);
 
     public string GetResetEmail(string useName, long cpf, string email);
 

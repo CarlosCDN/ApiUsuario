@@ -1,16 +1,16 @@
 ﻿using ApiUsuario.Domain.Model;
 
-namespace ApiUsuario.Infrastructure.Repositories
-{
-    public class AccessHistoryRepository : IAccessHistoryRepository
-    {
-        private readonly ConnectionContext _context = new ConnectionContext();
+namespace ApiUsuario.Infrastructure.Repositories;
 
-        //Adiciona Usuario no banco
-        public void Add(AccessHistory accessHistory)
-        {
-            _context.LogAcess.Add(accessHistory);
-            _context.SaveChanges();
-        }
+public class AccessHistoryRepository
+{
+    private readonly ConnectionContext _context = new ConnectionContext();
+
+    //Adiciona Usuario no banco
+    public void Add(AccessHistory accessHistory)
+    {
+        //var salvarToken = new AuthToken(usuarioId);
+        _context.AccessHistories.Add(accessHistory);
+        _context.SaveChanges();
     }
 }

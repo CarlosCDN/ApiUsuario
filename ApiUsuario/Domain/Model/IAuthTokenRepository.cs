@@ -2,6 +2,6 @@
 {
     public interface IAuthTokenRepository
     {
-        void add(AuthToken authToken);
+        public string AddToken(int usuarioId, string token);
     }
 }
