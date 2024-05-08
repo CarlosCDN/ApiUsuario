@@ -13,7 +13,7 @@ public class AuthToken
         Token = token;
         ExpirationDate = DateTime.UtcNow.AddHours(1);
     }
-    public AuthToken() { }  
+    public AuthToken() { }
     [Key]
     [Column("id")]
     public int Id { get; private set; }

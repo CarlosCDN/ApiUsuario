@@ -47,7 +47,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IAuthTokenRepository, AuthTokenRepository>();
-
+builder.Services.AddTransient<IAccessHistoryRepository, AccessHistoryRepository>();
 
 var key = Encoding.ASCII.GetBytes(ApiUsuario.Key.Secret);
 

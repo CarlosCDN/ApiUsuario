@@ -2,6 +2,6 @@
 {
     public interface IAccessHistoryRepository
     {
-        void add(AccessHistory accessHistory);
+        bool AddAccess(int userId, string userName);
     }
 }
