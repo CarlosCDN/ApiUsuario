@@ -8,7 +8,6 @@ namespace ApiUsuario.Domain.Model;
 public class User
 {
     public User(string name, string userName, long cpf, DateTime birthdayData, long numberPhone, string email, string password, string address, int numberHome, int usuarioId = 0)
-
     {
         UsuarioId = usuarioId == 0 ? GenerateRandomUserId() : usuarioId;
         Name = name ?? throw new ArgumentNullException(nameof(name));
@@ -20,7 +19,7 @@ public class User
         Password = HashPassword(password);
         Address = address;
         NumberHome = numberHome;
-        CreatedDate = DateTime.UtcNow;
+        CreatedDate = DateTime.Now;
         Profile = "Cliente";
         Status = "Ativado";
     }
@@ -41,7 +40,6 @@ public class User
          .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
-
     public User() { }
 
     public User(string userName, string password)
@@ -58,9 +56,7 @@ public class User
     // Retorna dados do Usuário
     public string GetDados()
     {
-
         return $"Nome: {Name}\nUserName: {UserName}\nCPF: {Cpf}\nE-mail: {Email}\nTelefone: {NumberPhone}\nEndereço: {Address}, {NumberHome}\nData de Nascimento: {BirthdayData}\n";
-
     }
 
     //Desativa User

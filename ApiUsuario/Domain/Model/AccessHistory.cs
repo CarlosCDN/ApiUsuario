@@ -9,7 +9,7 @@ public class AccessHistory
     {
         UserId = userId;
         UserName = userName;
-        AccessTime = DateTime.UtcNow;
+        AccessTime = DateTime.Now;
         Sucess = sucess;
     }
 
@@ -31,3 +31,4 @@ public class AccessHistory
     [Column("sucess")]
     public bool Sucess { get; set; }
 }
+     

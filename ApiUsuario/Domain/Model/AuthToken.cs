@@ -11,8 +11,9 @@ public class AuthToken
     {
         UserId = userId;
         Token = token;
-        ExpirationDate = DateTime.UtcNow.AddHours(1);
+        ExpirationDate = DateTime.Now.AddHours(1);
     }
+
     public AuthToken() { }
     [Key]
     [Column("id")]

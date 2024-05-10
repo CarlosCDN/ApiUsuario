@@ -30,8 +30,8 @@ public class AuthController : Controller
         if (user != 0)
         {
             object token = TokenService.GenerateToken(userDTO);
-            string tokenString = token.ToString();
-            _authTokenRepository.AddToken(user, tokenString);
+            // string tokenString = token.ToString();
+            _authTokenRepository.AddToken(user, token.ToString());
             return Ok(token);
         }
         return BadRequest("UserName or Password invalid");
