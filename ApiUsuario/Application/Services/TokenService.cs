@@ -18,7 +18,7 @@ public class TokenService
             {
                 new Claim("userId", userDTO.UsuarioId.ToString()),
             }),
-            Expires = DateTime.UtcNow.AddHours(1),
+            Expires = DateTime.Now.AddHours(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var TokenHandler = new JwtSecurityTokenHandler();

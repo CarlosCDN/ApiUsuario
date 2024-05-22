@@ -22,7 +22,7 @@ public class UserController : ControllerBase
 
 
     [Authorize]
-    [HttpPut("RecuperarSenha")]
+    [HttpPut("RedefinirSenha")]
     public IActionResult Get(string userName, string email, string newPassword)
     {
         var userDTO = new UserDTO(userName, email, newPassword);
@@ -67,7 +67,7 @@ public class UserController : ControllerBase
     }
 
     [Authorize]
-    [HttpPut("DeleteUser")]
+    [HttpPatch("DeleteUser")]
     public IActionResult PutDeleteUser(string userName, string email, string password)
     {
         var user = _userRepository.PutDeleteUser(userName, email, password);
@@ -96,7 +96,7 @@ public class UserController : ControllerBase
     }
 
     //Recuperar senha por e-mail
-    [HttpPut("RecuperarSenhaEmail")]
+    [HttpPatch("RecuperarSenhaEmail")]
     public IActionResult Get(string userName, string email, long cpf)
     {
         var userDTO = new UserDTO(userName, cpf, email);

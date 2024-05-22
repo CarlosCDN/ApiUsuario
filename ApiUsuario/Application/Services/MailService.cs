@@ -24,7 +24,6 @@ public class MailService
             smtpClient.UseDefaultCredentials = false;
             smtpClient.EnableSsl = true;
             smtpClient.Credentials = new NetworkCredential(_senderEmail, _senderPassword);
-
             var emailMessage = new MailMessage(_senderEmail, recipientEmail)
             {
                 Subject = subject,
