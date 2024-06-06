@@ -39,10 +39,9 @@ public class UserRepository : IUserRepository
 
             return users;
         }
-        else
-        {
+      
             return new List<UserDTO>();
-        }
+        
     }
     //Retorna o perfil do Usuário
     public string GetProfile(string userName)
@@ -56,14 +55,11 @@ public class UserRepository : IUserRepository
     public int Get(string userName, string password)
     {
         var user = _context.User.FirstOrDefault(u => u.UserName == userName && u.Status == "Ativado");
-        if (user != null && user.VerifyPassword(password, user.Password))
+        if (user.VerifyPassword(password, user.Password))
         {
             return user.UsuarioId;
         }
-        else
-        {
             return 0;
-        }
     }
 
 
@@ -91,10 +87,9 @@ public class UserRepository : IUserRepository
 
             return "Email enviado com sucesso"; // Retorna a nova senha
         }
-        else
-        {
+       
             return null;
-        }
+        
     }
 
     //Reset de senha depois do login
@@ -108,10 +103,7 @@ public class UserRepository : IUserRepository
             _context.SaveChanges(); // Salva as alterações no banco de dados
             return "Senha alterada com sucesso"; // Retorna a nova senha
         }
-        else
-        {
             return null;
-        }
     }
 
     //Desativa usuário

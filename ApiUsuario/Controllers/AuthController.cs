@@ -27,13 +27,14 @@ public class AuthController : Controller
 
         var user = _userRepository.Get(userDTO.UserName, userDTO.Password);
         _accessHistoryRepository.AddAccess(user, userName);
-        if (user != 0)
+        userDTO.UsuarioId = user;
+        if (user == 0)
         {
-            object token = TokenService.GenerateToken(userDTO);
-            // string tokenString = token.ToString();
-            _authTokenRepository.AddToken(user, token.ToString());
-            return Ok(token);
+            return BadRequest("UserName or Password invalid");
         }
-        return BadRequest("UserName or Password invalid");
+        object token = TokenService.GenerateToken(userDTO);
+        _authTokenRepository.AddToken(user, token.ToString());
+        return Ok(token);
+       
     }
 }

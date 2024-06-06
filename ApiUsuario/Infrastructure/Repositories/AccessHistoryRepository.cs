@@ -9,17 +9,9 @@ public class AccessHistoryRepository : IAccessHistoryRepository
     //Adiciona Usuario no banco
     public bool AddAccess(int userId, string userName)
     {
-        bool sucess = false;
-        if (userId == 0)
-        {
+        bool sucess = true;
+        if (userId == 0) sucess = false;
 
-            sucess = false;
-
-        }
-        else
-        {
-            sucess = true;
-        }
         var accessHistory = new AccessHistory(userId, userName, sucess);
         _context.AccessHistories.Add(accessHistory);
         _context.SaveChanges();

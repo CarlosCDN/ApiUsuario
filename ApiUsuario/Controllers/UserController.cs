@@ -23,7 +23,7 @@ public class UserController : ControllerBase
 
     [Authorize]
     [HttpPut("RedefinirSenha")]
-    public IActionResult Get(string userName, string email, string newPassword)
+    public IActionResult Put(string userName, string email, string newPassword)
     {
         var userDTO = new UserDTO(userName, email, newPassword);
         var user = _userRepository.PutResetSenha(userDTO.UserName, userDTO.Email, userDTO.Password);

@@ -42,11 +42,6 @@ public class User
 
     public User() { }
 
-    public User(string userName, string password)
-    {
-        UserName = userName;
-        Password = password;
-    }
     //Retorna Profile
     public string GetProfile()
     {
@@ -81,10 +76,10 @@ public class User
         var newPassword = GenerateRandomPassword();
         var validador = senderEmail.SendeMail(Email, "Recuperacao de senha", $"Olá! Sua nova senha é: {newPassword}"); // Envia nova senha
 
-        if (validador == true)
+        if (validador)
         {
             Password = HashPassword(newPassword);
-            return true;
+            return validador;
         }
         else
             return false;
